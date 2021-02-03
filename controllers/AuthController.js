@@ -3,7 +3,6 @@ const response = require('../utils/response');
 const sequelize = require('../utils/connectDB')
 const User = require('../models/User')
 
-
 // Biến cục bộ trên server này sẽ lưu trữ tạm danh sách token
 // Trong dự án thực tế, nên lưu chỗ khác, có thể lưu vào Redis hoặc DB
 let tokenList = {};
@@ -13,7 +12,6 @@ const accessTokenLife = process.env.ACCESS_TOKEN_LIFE || "1h";
 
 // Mã secretKey này phải được bảo mật tuyệt đối, các bạn có thể lưu vào biến môi trường hoặc file
 const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET || "PKMM97ENV";
-
 
 // Thời gian sống của refreshToken
 const refreshTokenLife = process.env.REFRESH_TOKEN_LIFE || "3650d";
@@ -26,16 +24,17 @@ const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET || "PKMM97REFRESH";
  * @param {*} res 
  */
 let login = async (req, res) => {
-
   try {
     const user = { 'username': req.body.username, 'password': req.body.password }
     //Check User Exist
     let checkUser = await User.findOne({ where: { username: user.username } })
     if (checkUser && checkUser.password === user.password) {
+
       //Tạo accessToken và refresh sau khi check id, pass
       const accessToken = await jwtHelper.generateToken(user, accessTokenSecret, accessTokenLife);
       const refreshToken = await jwtHelper.generateToken(user, refreshTokenSecret, refreshTokenLife);
-      tokenList = [{ "accessToken": accessToken, "refreshToken": refreshToken }];
+      const tokenList = [{ "accessToken": accessToken, "refreshToken": refreshToken }];
+
       //Save token to DB
       await User.update({ access_token: accessToken, refresh_token: refreshToken }, {
         where: {
@@ -67,8 +66,8 @@ let refreshToken = async (req, res) => {
       const decoded = await jwtHelper.verifyToken(refreshTokenFromClient, refreshTokenSecret);
 
       // Thông tin user lúc này các bạn có thể lấy thông qua biến decoded.data
-      const userFakeData = decoded.data;
-      const accessToken = await jwtHelper.generateToken(userFakeData, accessTokenSecret, accessTokenLife);
+      const userData = decoded.data;
+      const accessToken = await jwtHelper.generateToken(userData, accessTokenSecret, accessTokenLife);
 
       // gửi token mới về cho người dùng
       return response.withMessage("COMMON.CREATE_SUCCESS", true, accessToken, res)
@@ -85,8 +84,34 @@ let refreshToken = async (req, res) => {
   }
 };
 
+let signup = async (req, res) => {
+  const userData = {
+    'username': req.body.username,
+    'password': req.body.password,
+    'groupId': req.body.group_id,
+    'thumbnail:': req.body.thumbnail,
+    'link': req.body.link,
+    'dob': req.body.dob,
+    'sex': req.body.sex,
+  }
+
+  User.create(
+    {
+      username: userData.username,
+      password: userData.password,
+      groupId: userData.groupId,
+      thumbnail: userData.thumbnail,
+      link: userData.link,
+      dob: userData.dob,
+      sex: userData.sex,
+    }
+  );
+  return response.withMessage("COMMON.CREATE_SUCCESS", true, userData, res)
+}
 
 module.exports = {
   login: login,
+  signup: signup,
   refreshToken: refreshToken,
+
 }

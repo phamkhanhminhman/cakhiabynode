@@ -8,7 +8,7 @@ require('dotenv').config(); //Bắt buộc sau express()
 
 const testRoutes = require('./routes/test');
 const authRoutes = require('./routes/auth');
-
+const userRoutes = require('./routes/user')
 
 
 app.use(bodyParser.json());
@@ -21,6 +21,7 @@ app.use(express.urlencoded({ extended: true }))
 //ROUTING
 app.use('/test', testRoutes);
 app.use('/auth', authRoutes)
+app.use('/user', userRoutes)
 
 
 let server = app.listen(port, function () {

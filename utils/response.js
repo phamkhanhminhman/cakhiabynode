@@ -51,6 +51,9 @@ function withMessage(key, status, data, res) {
     resBody.status = status;
     if (data !== null) {
         resBody.data = data;
+        if (data.totalItems) {
+            resBody.totalItems = data.totalItems
+        }
     }
     if (code) {
         res.status(code).json(resBody);

@@ -20,10 +20,7 @@ function create(req, res) {
 async function index(req, res) {
     const users = await User.findAll();
     console.log(users.every(user => user instanceof User)); // true
-    return response.withMessage("COMMON.SUCCESSFULLY", true, users, res);
-
-
-    
+    return response.withMessage("COMMON.SUCCESSFULLY", true, users, res)
 }
 
 

@@ -1,6 +1,7 @@
 const response = require('../utils/response');
 const sequelize = require('../utils/connectDB')
 const User = require('../models/User');
+const { validationResult } = require('express-validator');
 
 let listUser = async (req, res) => {
     try {
@@ -14,7 +15,6 @@ let listUser = async (req, res) => {
         return response.withMessage("ERROR_SERVER", false, null, res)
     }
 }
-
 
 let show = async (req, res) => {
     const userID = req.params.userID;
@@ -32,12 +32,43 @@ let show = async (req, res) => {
 }
 
 let update = async (req, res) => {
-    
+    const userID = req.params.userID;
+    const userData = {
+        'username': req.body.username,
+        'password': req.body.password,
+        'groupId': req.body.groupId,
+        'thumbnail:': req.body.thumbnail,
+        'link': req.body.link,
+        'dob': req.body.dob,
+        'sex': req.body.sex,
+    }
+
+    const errors = validationResult(req);
+    //VALIDATE input data
+    if (!errors.isEmpty()) {
+        // return res.status(422).json({ errors: errors.array()[0] });
+        return response.withMessage("COMMON.INVALID_DATA", false, errors.array(), res)
+    }
+    //UPDATE user by id
+    User.update({
+        username: userData.username,
+        groupId: userData.groupId,
+        thumbnail: userData.thumbnail,
+        link: userData.link,
+        dob: userData.dob,
+        sex: userData.sex,
+    }, {
+        where: {
+            id: userID
+        }
+    });
+
+    return response.withMessage("COMMON.UPDATE_SUCCESS", true, userData, res)
 }
 
 let remove = async (req, res) => {
     const userID = req.params.userID;
-   // SELECT * FROM user WHERE id = ?
+    // SELECT * FROM user WHERE id = ?
     User.findByPk(userID)
         .then(user => {
             if (!user) {
@@ -56,5 +87,6 @@ let remove = async (req, res) => {
 module.exports = {
     list: listUser,
     show: show,
+    update: update,
     remove: remove
 }

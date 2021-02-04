@@ -1,11 +1,8 @@
+const { validationResult } = require('express-validator');
 const jwtHelper = require("../helpers/jwt.helper");
 const response = require('../utils/response');
 const sequelize = require('../utils/connectDB')
 const User = require('../models/User')
-
-// Biến cục bộ trên server này sẽ lưu trữ tạm danh sách token
-// Trong dự án thực tế, nên lưu chỗ khác, có thể lưu vào Redis hoặc DB
-let tokenList = {};
 
 // Thời gian sống của token
 const accessTokenLife = process.env.ACCESS_TOKEN_LIFE || "1h";
@@ -95,6 +92,13 @@ let signup = async (req, res) => {
     'sex': req.body.sex,
   }
 
+  const errors = validationResult(req);
+  //Validate input data
+  if (!errors.isEmpty()) {
+    return response.withMessage("COMMON.INVALID_DATA", false, errors.array(), res)
+  }
+
+  //Create new user
   User.create(
     {
       username: userData.username,

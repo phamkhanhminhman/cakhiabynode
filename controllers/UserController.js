@@ -3,6 +3,7 @@ const sequelize = require('../utils/connectDB')
 const User = require('../models/User');
 const { validationResult } = require('express-validator');
 
+//API LIST USER 
 let listUser = async (req, res) => {
     try {
         const currentPage = req.query.page || 1
@@ -16,6 +17,7 @@ let listUser = async (req, res) => {
     }
 }
 
+//API SHOW USER BY ID
 let show = async (req, res) => {
     const userID = req.params.userID;
     // SELECT * FROM user WHERE id = ?
@@ -31,6 +33,7 @@ let show = async (req, res) => {
         });
 }
 
+//API UPDATE USER BY ID
 let update = async (req, res) => {
     const userID = req.params.userID;
     const userData = {
@@ -66,6 +69,7 @@ let update = async (req, res) => {
     return response.withMessage("COMMON.UPDATE_SUCCESS", true, userData, res)
 }
 
+//API REMOVE USER BY ID
 let remove = async (req, res) => {
     const userID = req.params.userID;
     // SELECT * FROM user WHERE id = ?

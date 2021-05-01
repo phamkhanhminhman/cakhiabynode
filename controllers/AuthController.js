@@ -44,7 +44,7 @@ let login = async (req, res) => {
       return response.withMessage("AUTH.AUTH_INVALID", false, null, res)
     }
   } catch (error) {
-    return res.status(500).json(error);
+    return response.withMessage("ERROR_SERVER", false, null, res)
   }
 }
 
@@ -69,15 +69,11 @@ let refreshToken = async (req, res) => {
       // gửi token mới về cho người dùng
       return response.withMessage("COMMON.CREATE_SUCCESS", true, accessToken, res)
     } catch (error) {
-      res.status(403).json({
-        message: 'Invalid refresh token.',
-      });
+      return response.withMessage("AUTH.AUTH_INVALID", false, null, res)
     }
   } else {
     // Không tìm thấy token trong request
-    return res.status(403).send({
-      message: 'No token provided.',
-    });
+    return response.withMessage("AUTH.TOKEN_NOT_FOUND", false, null, res)
   }
 };
 

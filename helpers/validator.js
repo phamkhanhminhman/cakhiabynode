@@ -12,10 +12,10 @@ let validateRegisterUser = () => {
         }),
         check('username', 'username does not Empty').not().isEmpty(),
         check('username', 'username must be Alphanumeric').isAlphanumeric(),
-        check('password', 'password more than 6 digits').isLength({ min: 6 })
+        check('password', 'password more than 6 digits').isLength({ min: 6 }),
         // check('email', 'Invalid does not Empty').not().isEmpty(),
         // check('email', 'Invalid email').isEmail(),
-        // check('birthday', 'Invalid birthday').isISO8601('yyyy-mm-dd'),
+        check('dob', 'Invalid birthday').isISO8601('yyyy-mm-dd'),
 
     ];
 }

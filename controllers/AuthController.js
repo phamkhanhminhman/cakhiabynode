@@ -2,6 +2,7 @@ const { validationResult } = require('express-validator');
 const jwtHelper = require("../helpers/jwt.helper");
 const response = require('../utils/response');
 const sequelize = require('../utils/connectDB')
+const multer = require('multer');
 const User = require('../models/User')
 
 // Thời gian sống của token
@@ -108,6 +109,8 @@ let signup = async (req, res) => {
   );
   return response.withMessage("COMMON.CREATE_SUCCESS", true, userData, res)
 }
+
+
 
 module.exports = {
   login: login,

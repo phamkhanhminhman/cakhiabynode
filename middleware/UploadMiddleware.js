@@ -1,11 +1,7 @@
 const multer = require('multer');
 const util = require("util");
-const response = require("../utils/response");
-
 
 const maxSize = 2 * 1024 * 1024;
-
-
 
 // SET STORAGE
 let storage = multer.diskStorage({

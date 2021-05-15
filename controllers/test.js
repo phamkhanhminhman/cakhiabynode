@@ -27,11 +27,17 @@ async function index(req, res) {
 const apiUpload = async (req, res) => {
     try {
         await UploadMiddleware.single(req, res)
+        if (!req.file) {
+            return response.withMessage("COMMON.NO_FILE_PASS", false, null, res)
+        }
         return response.withMessage("COMMON.SUCCESSFULLY", true, req.file, res)
     } catch (error) {
         if (error.code == "LIMIT_FILE_SIZE") {
             return res.status(500).send({
+                status: false,
+                code: 422,
                 message: "File size cannot be larger than 2MB!",
+                server_time: new Date().toLocaleString()
             });
         }
     }
@@ -40,11 +46,17 @@ const apiUpload = async (req, res) => {
 const apiUploads = async (req, res) => {
     try {
         await UploadMiddleware.multiple(req, res)
+        if (!req.file) {
+            return response.withMessage("COMMON.NO_FILE_PASS", false, null, res)
+        }
         return response.withMessage("COMMON.SUCCESSFULLY", true, req.files, res)
     } catch (error) {
         if (error.code == "LIMIT_FILE_SIZE") {
             return res.status(500).send({
+                status: false,
+                code: 422,
                 message: "File size cannot be larger than 2MB!",
+                server_time: new Date().toLocaleString()
             });
         }
     }

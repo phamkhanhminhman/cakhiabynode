@@ -62,6 +62,16 @@ function withMessage(key, status, data, res) {
     }
 }
 
+let errorValidateRequest = (code, message, res) => {
+    let body = {
+        'code' : 422,
+        'message': message,
+        'server_time': new Date().toLocaleString()
+    }
+
+    res.json(body);
+}
+
 module.exports = {
-    withMessage
+    withMessage, errorValidateRequest
 };

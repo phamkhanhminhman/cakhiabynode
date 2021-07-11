@@ -18,6 +18,9 @@ let messages = {
        + '(Add, Edit, Delete) and (Add Own, Edit Own, Delete Own) have to the same.'
     },
     'ERROR_SERVER': 'Have an error in server, please try again',
+    'FILE': {
+      'TOO_LARGE': 'File size cannot be larger than 2MBBBB!'
+    },
     'COMMON': {
       'SUCCESSFULLY': 'Successfully.',
       'INVALID_PARAMETER': 'Query parameters are invalid.',

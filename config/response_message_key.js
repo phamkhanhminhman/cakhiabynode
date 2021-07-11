@@ -38,6 +38,11 @@ let messages_key = {
         'HTTP_CODE': 500,
         'CODE': 50001
     },
+    'FILE': {
+        'TOO_LARGE': {
+            'HTTP_CODE': 500
+        },
+    },
     'COMMON': {
         'SUCCESSFULLY': {
             'HTTP_CODE': 200

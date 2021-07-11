@@ -38,12 +38,7 @@ const apiUpload = async (req, res) => {
         return response.withMessage("COMMON.SUCCESSFULLY", true, req.file, res)
     } catch (error) {
         if (error.code == "LIMIT_FILE_SIZE") {
-            return res.status(500).send({
-                status: false,
-                code: 422,
-                message: "File size cannot be larger than 2MB!",
-                server_time: new Date().toLocaleString()
-            });
+            return response.errorServices("FILE.TOO_LARGE", res)
         }
     }
 }
@@ -64,12 +59,7 @@ const apiUploads = async (req, res) => {
         return response.withMessage("COMMON.SUCCESSFULLY", true, req.files, res)
     } catch (error) {
         if (error.code == "LIMIT_FILE_SIZE") {
-            return res.status(500).send({
-                status: false,
-                code: 422,
-                message: "File size cannot be larger than 2MB!",
-                server_time: new Date().toLocaleString()
-            });
+            return response.errorServices("FILE.TOO_LARGE", res)
         }
     }
 }

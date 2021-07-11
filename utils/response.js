@@ -62,10 +62,11 @@ function withMessage(key, status, data, res) {
     }
 }
 
-let errorValidateRequest = (code, message, res) => {
+let errorServices = (key, res) => {
     let body = {
-        'code' : 422,
-        'message': message,
+        'code' : generateCode(key),
+        'status': false,
+        'message': generateMessage(key),
         'server_time': new Date().toLocaleString()
     }
 
@@ -73,5 +74,5 @@ let errorValidateRequest = (code, message, res) => {
 }
 
 module.exports = {
-    withMessage, errorValidateRequest
+    withMessage, errorServices
 };
